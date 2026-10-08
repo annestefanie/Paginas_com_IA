@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost Wild — Locadora de Filmes Clássicos & Raros</title>
+  <meta name="description" content="Acervo de raridades cinematográficas em VHS, DVD e streaming vintage.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-brand-dark text-slate-200">
+
+  <!-- BANNER NOTIFICAÇÃO DE BANIMENTO OU MULTAS CRÍTICAS -->
+  <div id="ban-banner" class="d-none bg-brand-red text-white py-2 px-3 text-center small font-weight-bold">
+    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+    <span id="ban-message">Sua conta possui multas críticas pendentes. Regularize para evitar bloqueio permanente de aluguéis.</span>
+  </div>
+
+  <!-- HEADER / NAVBAR -->
+  <header class="sticky-top bg-brand-dark border-bottom border-brand-teal-subtle py-2 shadow">
+    <div class="container-xl d-flex items-center justify-content-between">
+      
+      <!-- LOGO -->
+      <a href="#" onclick="app.navigateTo('home')" class="navbar-brand d-flex flex-column">
+        <span class="font-serif fw-black fs-4 tracking-wider text-white">
+          <span class="text-brand-orange">LOST</span> WILD
+        </span>
+        <span class="text-brand-teal text-uppercase fw-semibold tracking-widest -mt-1" style="font-size: 0.6rem;">Cinema Archive</span>
+      </a>
+
+      <!-- MENU PRINCIPAL -->
+      <nav class="d-none d-md-flex align-items-center gap-2">
+        <button onclick="app.navigateTo('home')" class="nav-btn btn btn-sm text-slate-300 hover-white px-3 active-nav" id="nav-home">Catálogo</button>
+        <button onclick="app.navigateTo('about')" class="nav-btn btn btn-sm text-slate-300 hover-white px-3" id="nav-about">Sobre Nós</button>
+        <button onclick="app.navigateTo('profile')" class="nav-btn btn btn-sm text-slate-300 hover-white px-3" id="nav-profile">Minha Conta</button>
+      </nav>
+
+      <!-- AÇÕES: CARRINHO E LOGIN -->
+      <div class="d-flex align-items-center gap-3">
+        <button onclick="app.toggleCart()" class="btn btn-outline-brand-teal rounded-circle position-relative p-2" aria-label="Abrir Carrinho">
+          <i class="bi bi-bag fs-5 text-white"></i>
+          <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-brand-orange">0</span>
+        </button>
+
+        <div id="auth-header-state">
+          <!-- Renderizado dinamicamente via JS -->
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL (SPA) -->
+  <main class="flex-fill container-xl py-4">
+
+    <!-- SEÇÃO 1: CATÁLOGO (HOME) -->
+    <section id="page-home" class="page-section">
+      
+      <!-- HERO BANNER -->
+      <header class="text-center mx-auto my-4 my-md-5" style="max-width: 700px;">
+        <span class="badge text-bg-brand-teal text-uppercase tracking-widest px-3 py-1 mb-3">Coleção Exclusiva</span>
+        <h1 class="font-serif display-5 fw-bold text-white mb-3">Onde o Cinema Perdido Permanece Vivo.</h1>
+        <p class="text-slate-400 font-light">Descubra obras-primas cult, filmes raros em DVD/VHS e restaurações cinematográficas de acervo pessoal.</p>
+      </header>
+
+      <!-- CONTROLES DE BUSCA E FILTROS -->
+      <div class="card bg-brand-card border-brand-teal-subtle p-3 mb-4 shadow">
+        <div class="row g-3 align-items-center">
+          
+          <!-- BUSCA -->
+          <div class="col-12 col-md-6 col-lg-5">
+            <div class="input-group">
+              <span class="input-group-text bg-brand-dark border-brand-teal-subtle text-slate-400"><i class="bi bi-search"></i></span>
+              <input type="text" id="search-input" oninput="app.filterMovies()" placeholder="Buscar por título, diretor ou ano..." class="form-control bg-brand-dark border-brand-teal-subtle text-white">
+            </div>
+          </div>
+
+          <!-- FILTROS -->
+          <div class="col-12 col-md-6 col-lg-7 d-flex flex-wrap flex-sm-nowrap gap-2 justify-content-md-end">
+            <select id="genre-select" onchange="app.filterMovies()" class="form-select bg-brand-dark border-brand-teal-subtle text-slate-300 w-auto">
+              <option value="all">Todos os Gêneros</option>
+              <option value="Drama">Drama</option>
+              <option value="Romance">Romance</option>
+              <option value="Terror">Terror / Suspense</option>
+              <option value="Ficção Científica">Ficção Científica</option>
+              <option value="Crime">Crime / Noir</option>
+            </select>
+
+            <button id="btn-wishlist-filter" onclick="app.toggleWishlistFilter()" class="btn btn-brand-elevated border-brand-teal-subtle text-slate-300">
+              <i class="bi bi-heart-fill text-brand-orange me-1"></i> Wishlist (<span id="wishlist-count">0</span>)
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- GRID DE FILMES (20 TÍTULOS) -->
+      <div id="movies-container" class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3 sm:g-4">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: PERFIL DO USUÁRIO & MULTAS -->
+    <section id="page-profile" class="page-section d-none">
+      <div class="row g-4">
+        
+        <!-- SIDEBAR DE PERFIL -->
+        <aside class="col-12 col-lg-4 col-xl-3">
+          <div class="card bg-brand-card border-brand-teal-subtle p-3">
+            <div class="d-flex align-items-center gap-3 pb-3 border-bottom border-secondary-subtle mb-3">
+              <div id="user-avatar-initials" class="rounded-circle bg-brand-teal text-white font-serif fw-bold fs-4 d-flex align-items-center justify-center flex-shrink-0" style="width: 48px; height: 48px;">U</div>
+              <div class="text-truncate">
+                <h6 id="user-display-name" class="font-serif fw-bold text-white mb-0 text-truncate">Usuário Lost Wild</h6>
+                <small id="user-display-email" class="text-slate-400 d-block text-truncate">usuario@lostwild.com</small>
+                <span id="account-status-pill" class="badge text-bg-success mt-1">Conta Regular</span>
+              </div>
+            </div>
+
+            <div class="nav flex-column nav-pills gap-1">
+              <button onclick="app.switchProfileTab('rentals')" class="profile-tab nav-link active text-start text-slate-300 d-flex justify-content-between align-items-center">Meus Aluguéis</button>
+              <button onclick="app.switchProfileTab('fines')" class="profile-tab nav-link text-start text-slate-300 d-flex justify-content-between align-items-center">
+                Central de Multas <span id="fines-badge" class="badge bg-brand-red">0</span>
+              </button>
+              <button onclick="app.switchProfileTab('cards')" class="profile-tab nav-link text-start text-slate-300 d-flex justify-content-between align-items-center">Cartões de Crédito</button>
+              <button onclick="app.logout()" class="btn btn-outline-danger btn-sm text-start mt-3">Sair da Conta</button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ÁREA DE CONTEÚDO DAS TABS -->
+        <div class="col-12 col-lg-8 col-xl-9">
+          <div class="card bg-brand-card border-brand-teal-subtle p-4">
+            
+            <!-- TAB 1: ALUGUÉIS -->
+            <div id="tab-rentals" class="profile-tab-pane">
+              <h4 class="font-serif fw-bold text-white mb-4">Aluguéis & Reservas Ativas</h4>
+              
+              <div class="alert bg-brand-elevated border-start border-4 border-brand-teal text-slate-200 small mb-4">
+                <p class="mb-1">📍 <strong>Endereço de Retirada Física:</strong> Rua dos Antiquários, 1984 - Bairro Vintage, São Paulo - SP</p>
+                <p class="mb-0 text-slate-400">Prazo estimado de liberação para balcão: <strong>Até 2 dias úteis</strong> após a emissão do pedido.</p>
+              </div>
+
+              <div id="user-rentals-list" class="d-flex flex-column gap-2">
+                <!-- Renderizado via JS -->
+              </div>
+            </div>
+
+            <!-- TAB 2: MULTAS -->
+            <div id="tab-fines" class="profile-tab-pane d-none">
+              <h4 class="font-serif fw-bold text-white mb-4">Central de Multas e Regulamento</h4>
+              
+              <div class="card bg-brand-red-subtle border-brand-red p-3 mb-4">
+                <h6 class="fw-bold text-brand-orange mb-2"><i class="bi bi-file-earmark-text me-1"></i> Tabela Oficial de Tarifas por Atraso</h6>
+                <p class="small text-slate-300 mb-2">O atraso impede que outros cinéfilos tenham acesso à obra. Cobranças aplicadas automaticamente:</p>
+                <ul class="small text-slate-300 mb-0 ps-3">
+                  <li><strong>Atraso Leve (1 a 3 dias):</strong> R$ 5,00 / dia</li>
+                  <li><strong>Atraso Moderado (4 a 7 dias):</strong> R$ 10,00 / dia</li>
+                  <li><strong>Atraso Crítico (> 7 dias):</strong> R$ 20,00 / dia + Suspensão temporária de aluguéis</li>
+                  <li><strong>Inadimplência (> 15 dias sem quitação):</strong> Bloqueio definitivo da conta</li>
+                </ul>
+              </div>
+
+              <h5 class="font-serif fw-bold text-white mb-3">Seu Histórico de Multas</h5>
+              <div id="user-fines-list" class="d-flex flex-column gap-2">
+                <!-- Renderizado via JS -->
+              </div>
+            </div>
+
+            <!-- TAB 3: CARTÕES -->
+            <div id="tab-cards" class="profile-tab-pane d-none">
+              <h4 class="font-serif fw-bold text-white mb-4">Métodos de Pagamento Registrados</h4>
+              
+              <form id="add-card-form" onsubmit="app.saveCard(event)" class="card bg-brand-dark border-brand-teal-subtle p-3 mb-4">
+                <h6 class="font-serif fw-bold text-white mb-3">Adicionar Novo Cartão (Simulação)</h6>
+                <div class="mb-3">
+                  <label for="card-holder" class="form-label small text-slate-400">Nome Impresso no Cartão</label>
+                  <input type="text" id="card-holder" required placeholder="AUGUSTO M MORAIS" class="form-control form-control-sm bg-brand-elevated border-brand-teal-subtle text-white">
+                </div>
+                <div class="mb-3">
+                  <label for="card-number" class="form-label small text-slate-400">Número do Cartão</label>
+                  <input type="text" id="card-number" maxlength="19" required placeholder="0000 0000 0000 0000" class="form-control form-control-sm bg-brand-elevated border-brand-teal-subtle text-white">
+                </div>
+                <div class="row g-2 mb-3">
+                  <div class="col-6">
+                    <label for="card-expiry" class="form-label small text-slate-400">Validade</label>
+                    <input type="text" id="card-expiry" maxlength="5" placeholder="MM/AA" required class="form-control form-control-sm bg-brand-elevated border-brand-teal-subtle text-white">
+                  </div>
+                  <div class="col-6">
+                    <label for="card-cvv" class="form-label small text-slate-400">CVV</label>
+                    <input type="text" id="card-cvv" maxlength="4" placeholder="123" required class="form-control form-control-sm bg-brand-elevated border-brand-teal-subtle text-white">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-brand-orange w-100 btn-sm font-weight-bold">Salvar Cartão</button>
+              </form>
+
+              <div id="saved-cards-container" class="d-flex flex-column gap-2">
+                <!-- Renderizado via JS -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: SOBRE NÓS -->
+    <section id="page-about" class="page-section d-none">
+      <div class="mx-auto py-4" style="max-width: 900px;">
+        <div class="text-center mb-5">
+          <span class="badge text-bg-brand-teal text-uppercase tracking-widest px-3 py-1 mb-2">Nosso Manifesto</span>
+          <h2 class="font-serif fw-bold text-white">A Preservação da Memória Celulóide</h2>
+        </div>
+
+        <div class="row g-4 align-items-start">
+          <div class="col-12 col-md-8 text-slate-300 font-light lh-lg">
+            <p>A <strong class="text-white fw-semibold">Lost Wild</strong> nasceu em um porão analógico com uma missão clara: resistir ao esquecimento. Enquanto o mundo digital acelera rumo ao efêmero, nós mantemos vivas obras icônicas que moldaram a estética cinematográfica mundial.</p>
+            <p>Acreditamos no charme da seleção consciente, na nostalgia dos encartes táteis de DVD/VHS e na sensibilidade das grandes direções de arte. Nosso acervo combina raridades restauradas em altíssima definição com edições físicas difíceis de encontrar em qualquer streaming tradicional.</p>
+            <blockquote class="blockquote border-start border-3 border-brand-orange ps-3 my-4 fst-italic text-slate-400">
+              "O cinema não é apenas entretenimento; é um templo de memórias imutáveis contra a erosão do tempo."
+            </blockquote>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="card bg-brand-card border-brand-teal-subtle p-3">
+              <h5 class="font-serif fw-bold text-white mb-3"><i class="bi bi-shop me-2"></i> Unidade Física</h5>
+              <p class="small text-slate-400 mb-2"><strong>Endereço:</strong><br>Rua dos Antiquários, 1984 - Bairro Vintage, São Paulo - SP</p>
+              <p class="small text-slate-400 mb-2"><strong>Horário:</strong><br>Segunda a Sábado, das 10h às 22h</p>
+              <p class="small text-slate-400 mb-0"><strong>Contato:</strong><br>contato@lostwild.com | (11) 3888-1984</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE AUTENTICAÇÃO (LOGIN / REGISTRO) -->
+  <div class="modal fade" id="auth-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-brand-card border-brand-teal-subtle p-2 p-sm-3 shadow-lg">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+          <!-- TABS LOGIN/REGISTRO -->
+          <ul class="nav nav-tabs border-bottom border-brand-teal-subtle mb-4">
+            <li class="nav-item flex-fill text-center">
+              <button id="tab-login-btn" onclick="app.switchAuthMode('login')" class="nav-link active text-brand-orange fw-bold w-100">Entrar</button>
+            </li>
+            <li class="nav-item flex-fill text-center">
+              <button id="tab-register-btn" onclick="app.switchAuthMode('register')" class="nav-link text-slate-400 fw-bold w-100">Criar Conta</button>
+            </li>
+          </ul>
+
+          <!-- BOTÃO GOOGLE SIMULADO -->
+          <button onclick="app.loginWithGoogle()" class="btn btn-brand-elevated border-brand-teal-subtle text-white w-100 mb-3 d-flex align-items-center justify-content-center gap-2">
+            <i class="bi bi-google text-danger"></i> Entrar com o Google
+          </button>
+
+          <div class="position-relative text-center mb-3">
+            <hr class="border-secondary-subtle">
+            <span class="position-absolute top-50 start-50 translate-middle bg-brand-card px-2 small text-slate-500">ou com seu e-mail</span>
+          </div>
+
+          <!-- FORMULÁRIO -->
+          <form id="auth-form" onsubmit="app.handleAuthSubmit(event)">
+            <div id="group-name" class="mb-3 d-none">
+              <label for="auth-name" class="form-label small text-slate-400">Nome Completo</label>
+              <input type="text" id="auth-name" placeholder="Seu nome" class="form-control bg-brand-elevated border-brand-teal-subtle text-white">
+            </div>
+
+            <div class="mb-3">
+              <label for="auth-email" class="form-label small text-slate-400">E-mail</label>
+              <input type="email" id="auth-email" required placeholder="seu@email.com" class="form-control bg-brand-elevated border-brand-teal-subtle text-white">
+            </div>
+
+            <div class="mb-3">
+              <label for="auth-password" class="form-label small text-slate-400">Senha</label>
+              <input type="password" id="auth-password" required placeholder="••••••••" class="form-control bg-brand-elevated border-brand-teal-subtle text-white">
+            </div>
+
+            <div id="auth-error-msg" class="d-none alert alert-danger py-2 small mb-3"></div>
+
+            <button type="submit" id="auth-submit-btn" class="btn btn-brand-orange w-100 fw-bold">Entrar na Conta</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE DETALHES DO FILME -->
+  <div class="modal fade" id="movie-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-brand-card border-brand-teal-subtle p-3 shadow-lg">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="movie-modal-content">
+          <!-- Renderizado dinamicamente via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER / OFFCANVAS CARRINHO DE COMPRAS -->
+  <div class="offcanvas offcanvas-end bg-brand-card text-white border-start border-brand-teal-subtle" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+    <div class="offcanvas-header border-bottom border-brand-teal-subtle">
+      <h5 class="offcanvas-title font-serif fw-bold" id="cartOffcanvasLabel">Seu Carrinho</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    
+    <div class="offcanvas-body d-flex flex-column">
+      <div id="cart-items-container" class="flex-fill overflow-y-auto mb-3">
+        <!-- Renderizado via JS -->
+      </div>
+
+      <div class="pt-3 border-top border-brand-teal-subtle mt-auto">
+        <div class="d-flex justify-content-between align-items-center fw-bold fs-5 mb-2">
+          <span>Total:</span>
+          <span id="cart-total-price">R$ 0,00</span>
+        </div>
+        <div class="alert alert-secondary py-2 px-3 small text-center mb-3">
+          📍 Retirada presencial em loja física em até 2 dias úteis.
+        </div>
+        <button onclick="app.checkout()" class="btn btn-brand-orange w-100 fw-bold py-2">Finalizar Pedido / Aluguel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST DE NOTIFICAÇÃO BOOTSTRAP -->
+  <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" style="z-index: 1090;">
+    <div id="app-toast" class="toast align-items-center text-bg-dark border-brand-teal" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toast-message">
+          Notificação do sistema.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 Bundle JS com Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

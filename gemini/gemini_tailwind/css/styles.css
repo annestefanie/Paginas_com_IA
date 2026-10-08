@@ -1,0 +1,24 @@
+/* Customizations & Overrides for Tailwind CSS */
+@layer utilities {
+  .active-nav {
+    @apply text-white bg-brand-teal/20 border-b-2 border-brand-orange;
+  }
+}
+
+/* Custom Scrollbar for Vintage Dark Aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #071516;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #152B2C;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2B6E7C;
+}

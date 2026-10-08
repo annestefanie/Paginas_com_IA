@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071516">
+  <meta name="description" content="Lost Wild — uma locadora independente para filmes que merecem continuar vivos.">
+  <title>Lost Wild — filmes fora do tempo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { ink:'#071516', deep:'#0b2021', petrol:'#28565d', lagoon:'#2b6e7c', mist:'#a9c9c0', paper:'#e9e5d9', oxide:'#8f2d1d', gold:'#b8a15a' },
+        fontFamily: { sans:['DM Sans','sans-serif'], mono:['DM Mono','monospace'], serif:['Playfair Display','serif'] },
+        boxShadow: { soft:'0 20px 70px rgba(0,0,0,.28)' }
+      }}
+    };
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body class="bg-ink text-paper font-sans antialiased">
+  <a class="skip-link" href="#main">Pular para o conteúdo</a>
+  <div id="toast" role="status" aria-live="polite" class="toast" hidden></div>
+
+  <main id="main" class="min-h-screen">
+    <section id="authScreen" class="auth-layout">
+      <div class="auth-image relative overflow-hidden">
+        <div class="film-grain"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent"></div>
+        <div class="relative z-10 flex h-full flex-col justify-between p-6 sm:p-10">
+          <a href="index.html" class="wordmark" aria-label="Lost Wild, página inicial">lost<span>wild</span><i>®</i></a>
+          <div class="max-w-lg pb-6">
+            <p class="eyebrow mb-4">ARQUIVO Nº 001 — FILMES QUE FICAM</p>
+            <h1 class="font-serif text-5xl leading-[.98] sm:text-7xl">Algumas histórias<br><em class="text-mist">não envelhecem.</em></h1>
+            <p class="mt-5 max-w-sm text-sm leading-6 text-paper/75">Uma locadora independente para quem gosta de se perder em outros tempos.</p>
+          </div>
+          <p class="font-mono text-[10px] tracking-[.18em] text-paper/55">BRASÍLIA · DESDE 2021 · 15°47′S</p>
+        </div>
+      </div>
+      <div class="flex items-center justify-center px-5 py-10 sm:px-10">
+        <div class="w-full max-w-md">
+          <div class="mb-10 flex items-center justify-between">
+            <span class="eyebrow">ACESSO AO ACERVO</span>
+            <span class="font-mono text-xs text-mist">LW / 01</span>
+          </div>
+          <div class="mb-8">
+            <h2 id="authTitle" class="font-serif text-4xl">Que bom ter você aqui.</h2>
+            <p id="authSubtitle" class="mt-3 text-sm leading-6 text-paper/60">Entre para encontrar seu próximo filme favorito.</p>
+          </div>
+          <div class="mb-5 grid grid-cols-2 border-b border-white/15" role="tablist" aria-label="Tipo de acesso">
+            <button class="auth-tab active" id="loginTab" role="tab" aria-selected="true" aria-controls="authForm" type="button">Entrar</button>
+            <button class="auth-tab" id="registerTab" role="tab" aria-selected="false" aria-controls="authForm" type="button">Criar conta</button>
+          </div>
+          <button id="googleLogin" class="mb-5 flex w-full items-center justify-center gap-3 border border-white/20 px-4 py-3 text-sm transition hover:border-mist hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-mist" type="button">
+            <span class="grid h-5 w-5 place-items-center rounded-full bg-paper text-xs font-bold text-ink" aria-hidden="true">G</span>
+            Continuar com Google <span class="text-[10px] text-paper/40">(demo)</span>
+          </button>
+          <div class="or-divider"><span>ou com seu e-mail</span></div>
+          <form id="authForm" novalidate>
+            <label class="field-label" for="authName" id="nameLabel" hidden>Como podemos te chamar?</label>
+            <input id="authName" name="name" autocomplete="name" class="field mb-4" placeholder="Seu nome" hidden>
+            <label class="field-label" for="authEmail">E-mail</label>
+            <input id="authEmail" name="email" type="email" autocomplete="email" required class="field mb-4" placeholder="voce@exemplo.com">
+            <label class="field-label" for="authPassword">Senha</label>
+            <div class="relative mb-2">
+              <input id="authPassword" name="password" type="password" autocomplete="current-password" minlength="8" required class="field pr-20" placeholder="Mínimo de 8 caracteres">
+              <button id="togglePassword" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-mist underline underline-offset-4">Mostrar</button>
+            </div>
+            <p id="passwordHint" class="mb-5 text-xs leading-5 text-paper/45">Use pelo menos 8 caracteres. Nunca reutilize uma senha importante neste protótipo.</p>
+            <p id="authError" class="mb-4 text-sm text-red-300" role="alert" hidden></p>
+            <button id="authSubmit" class="button-primary w-full" type="submit">Entrar no acervo <span aria-hidden="true">↗</span></button>
+          </form>
+          <p class="mt-8 text-center text-xs leading-5 text-paper/45">Ao continuar, você concorda com as regras fictícias de uso da Lost Wild. <br>Seus dados ficam apenas neste navegador.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="appScreen" hidden>
+      <header class="site-header">
+        <a href="#" class="wordmark" data-view="home" aria-label="Lost Wild — início">lost<span>wild</span><i>®</i></a>
+        <nav class="hidden items-center gap-7 md:flex" aria-label="Navegação principal">
+          <button class="nav-link active" data-view="home">Acervo</button>
+          <button class="nav-link" data-view="profile">Minha estante</button>
+          <button class="nav-link" data-view="fines">Multas <span id="fineNavCount" class="nav-count">0</span></button>
+          <button class="nav-link" data-view="payments">Pagamentos</button>
+          <button class="nav-link" data-view="about">Manifesto</button>
+        </nav>
+        <div class="flex items-center gap-3">
+          <button id="openCart" class="relative border border-white/15 px-3 py-2 text-xs transition hover:border-mist" aria-label="Abrir sacola">SACOLA <span id="cartCount" class="ml-1 text-mist">0</span></button>
+          <button id="logoutButton" class="hidden text-xs text-paper/60 underline underline-offset-4 hover:text-paper sm:block">Sair</button>
+          <button id="mobileMenu" class="border border-white/15 px-3 py-2 text-xs md:hidden" aria-expanded="false" aria-controls="mobileNav">MENU</button>
+        </div>
+      </header>
+      <nav id="mobileNav" class="mobile-nav hidden" aria-label="Navegação móvel">
+        <button data-view="home">Acervo</button><button data-view="profile">Minha estante</button><button data-view="fines">Multas</button><button data-view="payments">Pagamentos</button><button data-view="about">Manifesto</button><button id="mobileLogout">Sair da conta</button>
+      </nav>
+      <div id="pageHome" class="page-view">
+        <section class="hero-section">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="status-dot"></span> UM ACERVO PARA QUEM PROCURA</p>
+            <h1 class="font-serif text-5xl leading-[.98] sm:text-7xl lg:text-8xl">Fora de época.<br><em class="text-mist">Dentro de você.</em></h1>
+            <p class="mt-6 max-w-md text-sm leading-7 text-paper/65">Clássicos, cults e filmes que desapareceram das prateleiras. Alugue em DVD, assista online ou leve para casa.</p>
+            <div class="mt-8 flex flex-wrap gap-3"><a href="#catalog" class="button-primary">Explorar o acervo <span aria-hidden="true">↓</span></a><button class="button-outline" data-view="about">Nossa história</button></div>
+            <div class="mt-12 flex gap-8 border-t border-white/15 pt-5">
+              <div><p class="font-serif text-2xl">240<span class="text-mist">+</span></p><p class="eyebrow mt-1">TÍTULOS RAROS</p></div>
+              <div><p class="font-serif text-2xl">35mm</p><p class="eyebrow mt-1">NOSSA INSPIRAÇÃO</p></div>
+              <div><p class="font-serif text-2xl">∞</p><p class="eyebrow mt-1">NOVAS DESCOBERTAS</p></div>
+            </div>
+          </div>
+          <div class="hero-art" aria-label="Composição visual abstrata inspirada em película de cinema">
+            <div class="hero-art-image"></div><div class="hero-art-shade"></div>
+            <div class="hero-stamp"><span>LOST WILD</span><span>FILM SOCIETY</span><span>EST. MMXXI</span></div>
+            <div class="hero-caption"><span>FRAME 014 / 024</span><span>— A BEAUTIFUL OBSESSION</span></div>
+          </div>
+        </section>
+        <section id="catalog" class="catalog-section">
+          <div class="section-heading">
+            <div><p class="eyebrow">O ACERVO / VOL. 01</p><h2 class="font-serif text-4xl sm:text-5xl">Encontre o seu <em class="text-mist">próximo clássico.</em></h2></div>
+            <p class="max-w-xs text-sm leading-6 text-paper/55">Filmes para ver pela primeira vez. Ou pela décima.</p>
+          </div>
+          <div class="catalog-tools">
+            <label class="search-wrap"><span aria-hidden="true">⌕</span><span class="sr-only">Buscar filmes</span><input id="searchInput" type="search" placeholder="Título, diretor ou ano..." autocomplete="off"></label>
+            <label class="sr-only" for="genreFilter">Filtrar por gênero</label><select id="genreFilter" class="filter-select"><option value="all">Todos os gêneros</option><option>Drama</option><option>Romance</option><option>Suspense</option><option>Ficção científica</option><option>Fantasia</option><option>Crime</option><option>Terror</option><option>Aventura</option><option>Comédia</option><option>Animação</option></select>
+            <div class="filter-pills" aria-label="Formato de exibição"><button class="filter-pill active" data-format="all">Tudo</button><button class="filter-pill" data-format="dvd">DVD</button><button class="filter-pill" data-format="online">Online</button></div>
+          </div>
+          <div class="flex items-center justify-between py-4"><p id="resultsCount" class="eyebrow">20 FILMES ENCONTRADOS</p><p class="font-mono text-[10px] text-paper/40">CURADORIA Nº 001</p></div>
+          <div id="filmGrid" class="film-grid" aria-live="polite"></div>
+          <div id="emptyResults" class="hidden py-20 text-center"><p class="font-serif text-3xl">Nenhum filme por aqui.</p><p class="mt-2 text-sm text-paper/50">Tente outra busca ou filtro.</p></div>
+        </section>
+        <section class="wishlist-banner">
+          <div><p class="eyebrow">VOCÊ ESCOLHE O QUE VOLTA</p><h2 class="mt-3 font-serif text-3xl sm:text-4xl">Sentiu falta de um filme?</h2><p class="mt-3 max-w-xl text-sm leading-6 text-paper/60">Peça um título para a nossa próxima garimpagem. A comunidade ajuda a manter o acervo vivo.</p></div>
+          <form id="wishForm" class="wish-form"><label class="sr-only" for="wishTitle">Filme que você gostaria de encontrar</label><input id="wishTitle" class="field" placeholder="Qual filme você procura?" required maxlength="100"><button class="button-primary" type="submit">Pedir filme ↗</button></form>
+        </section>
+      </div>
+
+      <section id="pageProfile" class="page-view content-page" hidden>
+        <div class="page-intro"><p class="eyebrow">SUA COLEÇÃO PARTICULAR</p><h1 class="font-serif text-5xl sm:text-7xl">Minha <em class="text-mist">estante.</em></h1><p class="mt-4 max-w-xl text-sm leading-7 text-paper/60">Tudo o que você reservou, alugou ou decidiu guardar por perto.</p></div>
+        <div class="stats-grid"><article class="stat-card"><span class="eyebrow">ALUGUÉIS ATIVOS</span><strong id="activeRentals">0</strong><span>títulos em sua posse</span></article><article class="stat-card"><span class="eyebrow">RESERVAS</span><strong id="reservationCount">0</strong><span>aguardando retirada</span></article><article class="stat-card"><span class="eyebrow">NA WISHLIST</span><strong id="wishlistCount">0</strong><span>filmes salvos</span></article></div>
+        <div class="content-panel mt-8"><div class="panel-heading"><h2 class="font-serif text-3xl">Seus filmes</h2><span class="eyebrow">HISTÓRICO + ATIVOS</span></div><div id="rentalList" class="divide-y divide-white/10"></div></div>
+        <div class="mt-8 flex flex-wrap items-center justify-between gap-4 border border-white/10 p-5"><div><p class="font-medium">Sua conta</p><p id="profileEmail" class="mt-1 text-sm text-paper/50"></p></div><button id="profileLogout" class="button-outline">Sair da conta</button></div>
+      </section>
+
+      <section id="pageFines" class="page-view content-page" hidden>
+        <div class="page-intro"><p class="eyebrow">REGRAS CLARAS, SEM SURPRESAS</p><h1 class="font-serif text-5xl sm:text-7xl">Multas & <em class="text-mist">prazos.</em></h1><p class="mt-4 max-w-xl text-sm leading-7 text-paper/60">A gente sabe que a vida acontece. Por isso, cada cobrança tem motivo, valor e caminho para contestação.</p></div>
+        <div class="stats-grid"><article class="stat-card"><span class="eyebrow">PENDENTE</span><strong id="pendingFineTotal">R$ 0,00</strong><span>valor em aberto</span></article><article class="stat-card"><span class="eyebrow">QUITADO</span><strong id="paidFineTotal">R$ 0,00</strong><span>histórico de pagamentos</span></article><article class="stat-card"><span class="eyebrow">STATUS DA CONTA</span><strong id="accountStatus">Regular</strong><span id="accountStatusNote">Sem restrições</span></article></div>
+        <div class="content-panel mt-8"><div class="panel-heading"><h2 class="font-serif text-3xl">Tabela de tarifas</h2><span class="eyebrow">VALORES FICTÍCIOS</span></div><div class="overflow-x-auto"><table class="data-table"><thead><tr><th>Ocorrência</th><th>Regra</th><th>Valor</th></tr></thead><tbody><tr><td>Atraso DVD</td><td>Por dia após o prazo</td><td>R$ 3,00/dia</td></tr><tr><td>Atraso de retirada</td><td>Reserva não retirada após 2 dias</td><td>R$ 5,00</td></tr><tr><td>Disco danificado</td><td>Após avaliação e aviso</td><td>Até R$ 35,00</td></tr><tr><td>Caixa ou encarte perdido</td><td>Reposição</td><td>R$ 12,00</td></tr></tbody></table></div></div>
+        <div class="content-panel mt-6"><div class="panel-heading"><h2 class="font-serif text-3xl">Seu histórico</h2><button id="fineHelp" class="text-xs text-mist underline underline-offset-4">Como contestar?</button></div><div id="fineList" class="divide-y divide-white/10"></div></div>
+        <div class="mt-6 border border-oxide/50 bg-oxide/10 p-5"><p class="font-medium">Sobre restrições e bloqueios</p><p class="mt-2 text-sm leading-6 text-paper/65">A conta pode ter novos aluguéis temporariamente suspensos quando há saldo vencido por mais de 14 dias ou 3 itens em atraso. Antes de qualquer bloqueio, a pessoa recebe aviso e pode contestar a cobrança. Bloqueios permanentes não são automáticos neste protótipo.</p></div>
+      </section>
+
+      <section id="pagePayments" class="page-view content-page" hidden>
+        <div class="page-intro"><p class="eyebrow">CHECKOUT DEMONSTRATIVO</p><h1 class="font-serif text-5xl sm:text-7xl">Seus <em class="text-mist">pagamentos.</em></h1><p class="mt-4 max-w-xl text-sm leading-7 text-paper/60">Cadastre um método fictício para simular compras e aluguéis. Nenhum dado financeiro é enviado ou cobrado.</p></div>
+        <div class="grid gap-8 lg:grid-cols-[.9fr_1.1fr]">
+          <div class="content-panel"><div class="panel-heading"><h2 class="font-serif text-3xl">Adicionar cartão</h2><span class="eyebrow">MODO TESTE</span></div><form id="paymentForm" class="space-y-4"><div><label class="field-label" for="cardName">Nome no cartão</label><input id="cardName" class="field" required maxlength="70" placeholder="Nome de demonstração"></div><div><label class="field-label" for="cardNumber">Número fictício</label><input id="cardNumber" class="field" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000" maxlength="19" required><p class="mt-2 text-xs text-paper/40">Use qualquer sequência de 16 dígitos. Não informe cartão real.</p></div><div class="grid grid-cols-2 gap-4"><div><label class="field-label" for="cardExpiry">Validade</label><input id="cardExpiry" class="field" placeholder="MM/AA" maxlength="5" required></div><div><label class="field-label" for="cardLabel">Apelido</label><input id="cardLabel" class="field" placeholder="Meu cartão" maxlength="24"></div></div><button class="button-primary w-full" type="submit">Salvar cartão fictício ↗</button></form></div>
+          <div class="content-panel"><div class="panel-heading"><h2 class="font-serif text-3xl">Métodos salvos</h2><span id="paymentCount" class="eyebrow">0 CARTÕES</span></div><div id="paymentList"></div><div class="mt-8 border-t border-white/10 pt-5"><p class="font-medium">Privacidade em primeiro lugar.</p><p class="mt-2 text-sm leading-6 text-paper/55">Este protótipo guarda apenas os últimos quatro dígitos para identificação e não realiza cobranças reais. Em produção, use um provedor de pagamentos certificado; nunca armazene CVV ou número completo do cartão.</p></div></div>
+        </div>
+      </section>
+
+      <section id="pageAbout" class="page-view content-page" hidden>
+        <div class="manifesto-art"><div class="film-grain"></div><p class="eyebrow">UM MANIFESTO EM 24 QUADROS</p><h1 class="font-serif text-5xl sm:text-8xl">Filmes não<br>deveriam <em class="text-mist">sumir.</em></h1><p class="mt-6 max-w-xl text-sm leading-7 text-paper/70">A Lost Wild nasceu da vontade de manter vivas histórias que não cabem em algoritmos, tendências ou catálogos que mudam toda semana.</p></div>
+        <div class="grid gap-10 py-14 md:grid-cols-2"><div><p class="eyebrow">NOSSA IDEIA</p><h2 class="mt-3 font-serif text-3xl">Garimpar. Preservar. Compartilhar.</h2></div><div class="space-y-4 text-sm leading-7 text-paper/65"><p>A gente acredita no ritual de escolher um filme sem pressa, ler o verso da caixa, descobrir um diretor por acaso e conversar depois dos créditos.</p><p>Por isso reunimos clássicos, obras cult, DVDs fora de catálogo e sessões online selecionadas. Cada título é uma pequena cápsula do tempo — e cada pessoa que assiste ajuda a mantê-la aberta.</p><p>Somos uma locadora fictícia com endereço de retirada em <strong class="font-medium text-paper">Rua das Acácias, 127 — Asa Norte, Brasília, DF</strong>. Reservas demonstrativas ficam disponíveis por 2 dias corridos.</p></div></div>
+        <div class="border-y border-white/15 py-8"><p class="font-serif text-3xl sm:text-5xl">“O próximo filme favorito pode estar escondido há décadas.”</p><p class="eyebrow mt-5">LOST WILD / CARTA DE INTENÇÕES</p></div>
+      </section>
+
+      <footer class="site-footer"><a href="#" class="wordmark" data-view="home">lost<span>wild</span><i>®</i></a><p>Filmes fora do tempo. <span class="text-paper/35">© 2026 Lost Wild — projeto demonstrativo.</span></p><button id="footerLogout" class="text-xs text-paper/50 underline underline-offset-4 hover:text-paper">Sair</button></footer>
+    </section>
+  </main>
+
+  <dialog id="filmDialog" class="modal">
+    <form method="dialog"><button class="modal-close" aria-label="Fechar detalhes">×</button></form>
+    <div id="filmDetail"></div>
+  </dialog>
+  <dialog id="cartDialog" class="modal cart-modal">
+    <form method="dialog"><button class="modal-close" aria-label="Fechar sacola">×</button></form>
+    <div class="panel-heading"><div><p class="eyebrow">SUA SELEÇÃO</p><h2 class="font-serif text-4xl">Sacola.</h2></div><span id="cartDialogCount" class="eyebrow">0 ITENS</span></div>
+    <div id="cartItems" class="mt-6"></div><div class="mt-6 border-t border-white/15 pt-5"><div class="flex items-center justify-between"><span class="text-sm text-paper/60">Subtotal</span><strong id="cartTotal" class="font-serif text-2xl">R$ 0,00</strong></div><button id="checkoutButton" class="button-primary mt-5 w-full">Confirmar pedido ↗</button><p class="mt-3 text-xs leading-5 text-paper/40">Pagamento demonstrativo. Nenhuma cobrança real será feita.</p></div>
+  </dialog>
+</body>
+</html>

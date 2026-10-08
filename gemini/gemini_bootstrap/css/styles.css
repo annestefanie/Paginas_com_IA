@@ -1,0 +1,85 @@
+/* PALETA DE CORES PERSONALIZADA LOST WILD (ESTÉTICA CINEMATIC DARK) */
+:root {
+  --brand-dark: #071516;
+  --brand-card: #0D1F20;
+  --brand-elevated: #152B2C;
+  --brand-primary: #053600;
+  --brand-teal: #2B6E7C;
+  --brand-teal-subtle: rgba(43, 110, 124, 0.3);
+  --brand-orange: #CF4000;
+  --brand-red: #76190E;
+  --brand-amber: #C69214;
+}
+
+body {
+  background-color: var(--brand-dark) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-serif {
+  font-family: 'Cinzel', serif;
+}
+
+/* CUSTOM BUTTONS & CLASSES BOOTSTRAP */
+.bg-brand-dark { background-color: var(--brand-dark) !important; }
+.bg-brand-card { background-color: var(--brand-card) !important; }
+.bg-brand-elevated { background-color: var(--brand-elevated) !important; }
+.bg-brand-orange { background-color: var(--brand-orange) !important; }
+.bg-brand-red { background-color: var(--brand-red) !important; }
+.bg-brand-red-subtle { background-color: rgba(118, 25, 14, 0.2) !important; }
+.text-bg-brand-teal { background-color: rgba(43, 110, 124, 0.2); color: var(--brand-teal); border: 1px solid var(--brand-teal-subtle); }
+
+.text-brand-teal { color: var(--brand-teal) !important; }
+.text-brand-orange { color: var(--brand-orange) !important; }
+.text-brand-amber { color: var(--brand-amber) !important; }
+
+.border-brand-teal-subtle { border-color: var(--brand-teal-subtle) !important; }
+.border-brand-red { border-color: var(--brand-red) !important; }
+
+.btn-brand-orange {
+  background-color: var(--brand-orange);
+  color: #fff;
+  border: none;
+}
+.btn-brand-orange:hover {
+  background-color: #b53800;
+  color: #fff;
+}
+
+.btn-brand-elevated {
+  background-color: var(--brand-elevated);
+  color: #e2e8f0;
+}
+.btn-brand-elevated:hover {
+  background-color: rgba(43, 110, 124, 0.2);
+  color: #fff;
+}
+
+.btn-outline-brand-teal {
+  border-color: var(--brand-teal-subtle);
+  color: #e2e8f0;
+}
+.btn-outline-brand-teal:hover {
+  border-color: var(--brand-orange);
+  color: var(--brand-orange);
+}
+
+.active-nav {
+  color: #fff !important;
+  background-color: rgba(43, 110, 124, 0.2);
+  border-bottom: 2px solid var(--brand-orange);
+}
+
+.movie-card {
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.movie-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--brand-teal) !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--brand-dark); }
+::-webkit-scrollbar-thumb { background: var(--brand-elevated); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-teal); }

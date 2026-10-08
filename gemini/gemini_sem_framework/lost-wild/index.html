@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost Wild — Locadora de Filmes Clássicos & Raros</title>
+  <meta name="description" content="Acervo de raridades cinematográficas em VHS, DVD e streaming vintage.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- HEADER / NAVBAR -->
+  <header class="main-header">
+    <div class="container nav-wrapper">
+      <a href="#" class="brand-logo" onclick="app.navigateTo('home')">
+        <span class="logo-accent">LOST</span> WILD
+        <span class="logo-sub">CINEMA ARCHIVE</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Navegação principal">
+        <button class="nav-link active" onclick="app.navigateTo('home')">Catálogo</button>
+        <button class="nav-link" onclick="app.navigateTo('about')">Sobre Nós</button>
+        <button class="nav-link" id="nav-profile" onclick="app.navigateTo('profile')">Minha Conta</button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="cart-btn" onclick="app.toggleCart()" aria-label="Abrir Carrinho">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span class="cart-badge" id="cart-count">0</span>
+        </button>
+
+        <div id="auth-header-state">
+          <!-- Dinâmico via JS: Botão Login ou User Badge -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BANNER NOTIFICAÇÃO BANIMENTO / MULTAS -->
+  <div id="ban-banner" class="alert-banner hidden">
+    <div class="container alert-content">
+      <span class="alert-icon">⚠️</span>
+      <p id="ban-message">Sua conta possui multas críticas pendentes. Regularize para evitar bloqueio de aluguéis.</p>
+    </div>
+  </div>
+
+  <main class="main-content container">
+
+    <!-- SEÇÃO 1: CATÁLOGO (HOME) -->
+    <section id="page-home" class="page-section active">
+      <!-- HERO BANNER -->
+      <header class="hero-section">
+        <div class="hero-tag">COLEÇÃO EXCLUSIVA</div>
+        <h1 class="hero-title">Onde o Cinema Perdido Permanece Vivo.</h1>
+        <p class="hero-subtitle">Descubra títulos raros, clássicos restaurados em DVD e pérolas cult esquecidas pelo tempo.</p>
+      </header>
+
+      <!-- CONTROLES DE BUSCA E FILTRO -->
+      <div class="catalog-controls">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="search-input" placeholder="Buscar por título, diretor ou ano..." oninput="app.filterMovies()">
+        </div>
+
+        <div class="filter-group">
+          <select id="genre-select" onchange="app.filterMovies()">
+            <option value="all">Todos os Gêneros</option>
+            <option value="Drama">Drama</option>
+            <option value="Romance">Romance</option>
+            <option value="Terror">Terror / Suspense</option>
+            <option value="Ficção Científica">Ficção Científica</option>
+            <option value="Crime">Crime / Noir</option>
+          </select>
+
+          <button class="wishlist-toggle-btn" id="btn-wishlist-filter" onclick="app.toggleWishlistFilter()">
+            ♥ Minha Wishlist (<span id="wishlist-count">0</span>)
+          </button>
+        </div>
+      </div>
+
+      <!-- GRID DE FILMES (20 TÍTULOS) -->
+      <div class="movies-grid" id="movies-container">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </section>
+
+
+    <!-- SEÇÃO 2: PERFIL DO USUÁRIO & MULTAS -->
+    <section id="page-profile" class="page-section hidden">
+      <div class="profile-layout">
+        
+        <!-- SIDEBAR DE NAVEGAÇÃO INTERNA DO PERFIL -->
+        <aside class="profile-sidebar">
+          <div class="user-card-summary">
+            <div class="avatar-circle" id="user-avatar-initials">U</div>
+            <div>
+              <h3 id="user-display-name">Usuário Lost Wild</h3>
+              <p class="user-email" id="user-display-email">usuario@lostwild.com</p>
+              <span class="status-pill pill-active" id="account-status-pill">Conta Regular</span>
+            </div>
+          </div>
+
+          <nav class="profile-menu">
+            <button class="profile-tab active" onclick="app.switchProfileTab('rentals')">Meus Aluguéis & Reservas</button>
+            <button class="profile-tab" onclick="app.switchProfileTab('fines')">Central de Multas <span class="badge-fines" id="fines-badge">0</span></button>
+            <button class="profile-tab" onclick="app.switchProfileTab('cards')">Cartões e Pagamento</button>
+            <button class="profile-tab btn-logout" onclick="app.logout()">Sair da Conta</button>
+          </nav>
+        </aside>
+
+        <!-- CONTEÚDO DAS TABS DE PERFIL -->
+        <div class="profile-content">
+
+          <!-- TAB 1: ALUGUÉIS -->
+          <div id="tab-rentals" class="tab-pane active">
+            <h2 class="section-title">Aluguéis & Reservas Ativas</h2>
+            
+            <div class="info-callout">
+              <p>📍 <strong>Endereço de Retirada Física:</strong> Rua dos Antiquários, 1984 - Bairro Vintage, São Paulo - SP</p>
+              <p class="sub-callout">Prazo médio para liberação de balcão: <strong>Até 2 dias úteis</strong> após a aprovação.</p>
+            </div>
+
+            <div class="rentals-list" id="user-rentals-list">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+
+          <!-- TAB 2: MULTAS E BANIMENTO -->
+          <div id="tab-fines" class="tab-pane hidden">
+            <h2 class="section-title">Minhas Multas e Histórico</h2>
+            
+            <!-- Tabela de Valores Globais -->
+            <div class="fines-policy-card">
+              <h3>📋 Tabela Oficial de Valores por Atraso</h3>
+              <p>O atraso na devolução compromete o acervo e gera as seguintes tarifas automatizadas:</p>
+              <ul>
+                <li><strong>Atraso Leve (1 a 3 dias):</strong> R$ 5,00 / dia</li>
+                <li><strong>Atraso Moderado (4 a 7 dias):</strong> R$ 10,00 / dia</li>
+                <li><strong>Atraso Crítico (> 7 dias):</strong> R$ 20,00 / dia + Bloqueio temporário de novos aluguéis</li>
+                <li><strong>Bloqueio Severo (> 15 dias sem pagamento):</strong> Banimento permanente da conta</li>
+              </ul>
+            </div>
+
+            <div class="fines-status-wrapper">
+              <h3>Suas Multas Cadastradas</h3>
+              <div id="user-fines-list">
+                <!-- Renderizado via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: CARTÕES DE CRÉDITO -->
+          <div id="tab-cards" class="tab-pane hidden">
+            <h2 class="section-title">Métodos de Pagamento Registrados</h2>
+            
+            <form id="add-card-form" class="card-form" onsubmit="app.saveCard(event)">
+              <h3>Adicionar Novo Cartão (Simulação Segura)</h3>
+              <div class="form-group">
+                <label for="card-holder">Nome Impresso no Cartão</label>
+                <input type="text" id="card-holder" required placeholder="AUGUSTO M MORAIS">
+              </div>
+              <div class="form-group">
+                <label for="card-number">Número do Cartão</label>
+                <input type="text" id="card-number" maxlength="19" required placeholder="0000 0000 0000 0000">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="card-expiry">Validade</label>
+                  <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5" required>
+                </div>
+                <div class="form-group">
+                  <label for="card-cvv">CVV</label>
+                  <input type="text" id="card-cvv" placeholder="123" maxlength="4" required>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">Salvar Cartão</button>
+            </form>
+
+            <div class="saved-cards-list" id="saved-cards-container">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- SEÇÃO 3: SOBRE NÓS -->
+    <section id="page-about" class="page-section hidden">
+      <div class="about-container">
+        <div class="about-header">
+          <span class="hero-tag">NOSSA MANIFESTO</span>
+          <h2 class="about-title">A Preservação da Memória Celulóide</h2>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-text">
+            <p>A <strong>Lost Wild</strong> nasceu em um pequeno porão analógico com um único propósito: resistir ao esquecimento. Em uma era dominada por algoritmos efêmeros e catálogos digitais descartáveis, nós resgatamos obras que moldaram a história do cinema mundial.</p>
+            <p>Acreditamos na mística da escolha consciente, no encarte tátil de um DVD de edição especial e na estética crua, poética e melancólica das obras clássicas. Nosso acervo inclui restaurações em altíssima definição e cópias raras que você não encontrará em grandes plataformas globais.</p>
+            <blockquote class="vintage-quote">
+              "O cinema não é apenas entretenimento; é um templo de memórias preservadas contra a erosão do tempo."
+            </blockquote>
+          </div>
+          <div class="about-card-visual">
+            <div class="store-info-box">
+              <h3>🏪 Nossa Loja Física</h3>
+              <p><strong>Endereço:</strong> Rua dos Antiquários, 1984 - Bairro Vintage, São Paulo - SP</p>
+              <p><strong>Horário:</strong> Segunda a Sábado, das 10h às 22h</p>
+              <p><strong>Contato:</strong> contato@lostwild.com | (11) 3888-1984</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE AUTENTICAÇÃO (LOGIN / REGISTRO) -->
+  <div id="auth-modal" class="modal-overlay hidden" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close" onclick="app.closeAuthModal()" aria-label="Fechar Modal">&times;</button>
+      
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-login-btn" onclick="app.switchAuthMode('login')">Entrar</button>
+        <button class="auth-tab-btn" id="tab-register-btn" onclick="app.switchAuthMode('register')">Criar Conta</button>
+      </div>
+
+      <!-- BOTÃO GOOGLE SIMULADO -->
+      <button class="google-auth-btn" onclick="app.loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.2 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.3s.7 2.6 1.9 5l3.7-2.5z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.2-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"/></svg>
+        Entrar com o Google
+      </button>
+
+      <div class="auth-divider"><span>ou com seu e-mail</span></div>
+
+      <!-- FORMULÁRIO DE LOGIN / REGISTRO -->
+      <form id="auth-form" onsubmit="app.handleAuthSubmit(event)">
+        <div class="form-group" id="group-name" style="display: none;">
+          <label for="auth-name">Nome Completo</label>
+          <input type="text" id="auth-name" placeholder="Seu nome">
+        </div>
+
+        <div class="form-group">
+          <label for="auth-email">E-mail</label>
+          <input type="email" id="auth-email" required placeholder="seu@email.com">
+        </div>
+
+        <div class="form-group">
+          <label for="auth-password">Senha</label>
+          <input type="password" id="auth-password" required placeholder="••••••••">
+          <small class="form-hint" id="password-hint">Mínimo de 6 caracteres.</small>
+        </div>
+
+        <div id="auth-error-msg" class="auth-error hidden"></div>
+
+        <button type="submit" class="btn-primary full-width" id="auth-submit-btn">Entrar na Conta</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE DETALHES DO FILME -->
+  <div id="movie-modal" class="modal-overlay hidden" aria-hidden="true">
+    <div class="modal-card modal-large">
+      <button class="modal-close" onclick="app.closeMovieModal()">&times;</button>
+      <div id="movie-modal-content">
+        <!-- Preenchido dinamicamente via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER / CARRINHO DE COMPRAS E ALUGUÉIS -->
+  <aside id="cart-drawer" class="cart-drawer hidden">
+    <div class="cart-header">
+      <h2>Seu Carrinho</h2>
+      <button class="close-drawer" onclick="app.toggleCart()">&times;</button>
+    </div>
+
+    <div class="cart-items" id="cart-items-container">
+      <!-- Preenchido dinamicamente via JS -->
+    </div>
+
+    <div class="cart-footer">
+      <div class="cart-summary-line">
+        <span>Total:</span>
+        <strong id="cart-total-price">R$ 0,00</strong>
+      </div>
+      
+      <div class="pickup-notice">
+        <small>📍 Retirada em loja em até 2 dias úteis pós-confirmação.</small>
+      </div>
+
+      <button class="btn-primary full-width" onclick="app.checkout()">Finalizar Pedido / Aluguel</button>
+    </div>
+  </aside>
+
+  <!-- TOAST DE NOTIFICAÇÃO -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

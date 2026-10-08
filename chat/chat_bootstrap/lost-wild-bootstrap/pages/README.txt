@@ -1,0 +1,1 @@
+As vistas internas (Arquivo, Estante, Perfil, Multas, Pagamentos e Manifesto) são organizadas como seções acessíveis dentro de index.html para manter a experiência de protótipo simples. A navegação é controlada por js/app.js.

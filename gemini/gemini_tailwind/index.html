@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost Wild — Locadora de Filmes Clássicos & Raros</title>
+  <meta name="description" content="Acervo de raridades cinematográficas em VHS, DVD e streaming vintage.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#071516',       /* Aztec Dark Teal/Black */
+              card: '#0D1F20',       /* Card Background */
+              elevated: '#152B2C',   /* Elevações e inputs */
+              primary: '#053600',    /* Verde Wong Kar-wai */
+              teal: '#2B6E7C',       /* Ming Blue / Teal */
+              orange: '#CF4000',     /* Terrakotta / Orange Burn */
+              red: '#76190E',        /* Red Oxide Vintage */
+              amber: '#C69214'       /* Ouro Envelhecido */
+            }
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-brand-dark text-slate-200 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-orange selection:text-white">
+
+  <!-- HEADER / NAVBAR -->
+  <header class="sticky top-0 z-50 bg-brand-dark/90 backdrop-blur-md border-b border-brand-teal/20 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+      
+      <!-- LOGO -->
+      <a href="#" onclick="app.navigateTo('home')" class="group flex flex-col focus:outline-none">
+        <span class="font-serif font-extrabold text-xl sm:text-2xl tracking-widest text-white group-hover:text-brand-orange transition-colors">
+          <span class="text-brand-orange">LOST</span> WILD
+        </span>
+        <span class="text-[9px] font-sans tracking-[0.25em] text-brand-teal font-semibold -mt-1 uppercase">Cinema Archive</span>
+      </a>
+
+      <!-- MENU PRINCIPAL -->
+      <nav class="hidden md:flex items-center gap-2" aria-label="Navegação principal">
+        <button onclick="app.navigateTo('home')" class="nav-btn px-4 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-brand-teal/20 transition-all active-nav" id="nav-home">Catálogo</button>
+        <button onclick="app.navigateTo('about')" class="nav-btn px-4 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-brand-teal/20 transition-all" id="nav-about">Sobre Nós</button>
+        <button onclick="app.navigateTo('profile')" class="nav-btn px-4 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-brand-teal/20 transition-all" id="nav-profile">Minha Conta</button>
+      </nav>
+
+      <!-- AÇÕES: CARRINHO E LOGIN -->
+      <div class="flex items-center gap-3">
+        <button onclick="app.toggleCart()" class="relative p-2.5 rounded-full bg-brand-elevated border border-brand-teal/30 text-slate-300 hover:text-brand-orange hover:border-brand-orange transition-all focus:outline-none" aria-label="Abrir Carrinho">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-orange text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+        </button>
+
+        <div id="auth-header-state">
+          <!-- Renderizado dinamicamente via JS -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BANNER NOTIFICAÇÃO DE BANIMENTO OU MULTAS CRÍTICAS -->
+  <div id="ban-banner" class="hidden bg-brand-red border-b border-white/10 py-2.5 text-white text-xs sm:text-sm font-medium">
+    <div class="max-w-7xl mx-auto px-4 flex items-center gap-2 justify-center text-center">
+      <span>⚠️</span>
+      <p id="ban-message">Sua conta possui multas críticas pendentes. Regularize para evitar bloqueio permanente de aluguéis.</p>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL (SPA) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
+
+    <!-- SEÇÃO 1: CATÁLOGO (HOME) -->
+    <section id="page-home" class="page-section">
+      
+      <!-- HERO BANNER -->
+      <header class="text-center max-w-3xl mx-auto py-8 sm:py-12">
+        <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-brand-teal bg-brand-teal/10 px-3 py-1 rounded-full border border-brand-teal/20 mb-3">Coleção Exclusiva</span>
+        <h1 class="font-serif text-3xl sm:text-5xl font-extrabold text-white leading-tight mb-4">Onde o Cinema Perdido Permanece Vivo.</h1>
+        <p class="text-slate-400 text-sm sm:text-base font-light">Descubra obras-primas cult, filmes raros em DVD/VHS e restaurações cinematográficas de acervo pessoal.</p>
+      </header>
+
+      <!-- CONTROLES DE BUSCA E FILTROS -->
+      <div class="bg-brand-card border border-brand-teal/20 rounded-xl p-4 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between shadow-xl">
+        
+        <!-- BUSCA -->
+        <div class="relative w-full md:w-96">
+          <svg class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="search-input" oninput="app.filterMovies()" placeholder="Buscar por título, diretor ou ano..." class="w-full bg-brand-dark border border-brand-teal/30 rounded-lg pl-11 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal transition-colors">
+        </div>
+
+        <!-- FILTROS -->
+        <div class="flex flex-wrap sm:flex-nowrap w-full md:w-auto gap-3 items-center">
+          <select id="genre-select" onchange="app.filterMovies()" class="w-full sm:w-auto bg-brand-dark border border-brand-teal/30 text-slate-300 text-sm rounded-lg px-4 py-2.5 outline-none focus:border-brand-teal transition-colors">
+            <option value="all">Todos os Gêneros</option>
+            <option value="Drama">Drama</option>
+            <option value="Romance">Romance</option>
+            <option value="Terror">Terror / Suspense</option>
+            <option value="Ficção Científica">Ficção Científica</option>
+            <option value="Crime">Crime / Noir</option>
+          </select>
+
+          <button id="btn-wishlist-filter" onclick="app.toggleWishlistFilter()" class="w-full sm:w-auto bg-brand-elevated border border-brand-teal/30 hover:border-brand-orange text-slate-300 hover:text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+            <span class="text-brand-orange">♥</span> Wishlist (<span id="wishlist-count">0</span>)
+          </button>
+        </div>
+      </div>
+
+      <!-- GRID DE FILMES (20 TÍTULOS) -->
+      <div id="movies-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: PERFIL DO USUÁRIO & MULTAS -->
+    <section id="page-profile" class="page-section hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- SIDEBAR DE PERFIL -->
+        <aside class="lg:col-span-1 bg-brand-card border border-brand-teal/20 rounded-xl p-6 h-fit">
+          <div class="flex items-center gap-4 pb-6 border-b border-brand-teal/20 mb-6">
+            <div id="user-avatar-initials" class="w-12 h-12 rounded-full bg-brand-teal text-white font-serif font-bold text-xl flex items-center justify-center border border-white/10">U</div>
+            <div class="overflow-hidden">
+              <h3 id="user-display-name" class="font-serif font-bold text-white text-base truncate">Usuário Lost Wild</h3>
+              <p id="user-display-email" class="text-xs text-slate-400 truncate">usuario@lostwild.com</p>
+              <span id="account-status-pill" class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold mt-1 bg-emerald-950 text-emerald-400 border border-emerald-800/40">Conta Regular</span>
+            </div>
+          </div>
+
+          <nav class="space-y-1">
+            <button onclick="app.switchProfileTab('rentals')" class="profile-tab active w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-brand-elevated hover:text-white transition-all flex items-center justify-between">Meus Aluguéis</button>
+            <button onclick="app.switchProfileTab('fines')" class="profile-tab w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-brand-elevated hover:text-white transition-all flex items-center justify-between">Central de Multas <span id="fines-badge" class="bg-brand-red text-white text-xs px-2 py-0.5 rounded-full">0</span></button>
+            <button onclick="app.switchProfileTab('cards')" class="profile-tab w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-brand-elevated hover:text-white transition-all flex items-center justify-between">Cartões de Crédito</button>
+            <button onclick="app.logout()" class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-brand-red hover:bg-brand-red/10 transition-all mt-4 border border-brand-red/20">Sair da Conta</button>
+          </nav>
+        </aside>
+
+        <!-- ÁREA DE CONTEÚDO DAS TABS -->
+        <div class="lg:col-span-3 bg-brand-card border border-brand-teal/20 rounded-xl p-6 sm:p-8">
+          
+          <!-- TAB 1: ALUGUÉIS -->
+          <div id="tab-rentals" class="profile-tab-pane">
+            <h2 class="font-serif text-2xl font-bold text-white mb-6">Aluguéis & Reservas Ativas</h2>
+            
+            <div class="bg-brand-elevated border-l-4 border-brand-teal p-4 rounded-r-lg mb-6 text-sm">
+              <p class="text-slate-200">📍 <strong>Endereço de Retirada Física:</strong> Rua dos Antiquários, 1984 - Bairro Vintage, São Paulo - SP</p>
+              <p class="text-xs text-slate-400 mt-1">Prazo estimado de liberação para balcão: <strong>Até 2 dias úteis</strong> após a emissão do pedido.</p>
+            </div>
+
+            <div id="user-rentals-list" class="space-y-3">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+
+          <!-- TAB 2: MULTAS -->
+          <div id="tab-fines" class="profile-tab-pane hidden">
+            <h2 class="font-serif text-2xl font-bold text-white mb-6">Central de Multas e Regulamento</h2>
+            
+            <div class="bg-brand-red/10 border border-brand-red/40 p-5 rounded-lg mb-8 text-sm">
+              <h3 class="font-bold text-red-400 text-base mb-2">📋 Tabela Oficial de Tarifas por Atraso</h3>
+              <p class="text-slate-300 mb-3">O atraso impede que outros cinéfilos tenham acesso à obra. Cobranças aplicadas automaticamente:</p>
+              <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs sm:text-sm">
+                <li><strong>Atraso Leve (1 a 3 dias):</strong> R$ 5,00 / dia</li>
+                <li><strong>Atraso Moderado (4 a 7 dias):</strong> R$ 10,00 / dia</li>
+                <li><strong>Atraso Crítico (> 7 dias):</strong> R$ 20,00 / dia + Suspensão temporária de aluguéis</li>
+                <li><strong>Inadimplência (> 15 dias sem quitação):</strong> Bloqueio definitivo da conta</li>
+              </ul>
+            </div>
+
+            <h3 class="font-serif text-lg font-bold text-white mb-4">Seu Histórico de Multas</h3>
+            <div id="user-fines-list" class="space-y-3">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+
+          <!-- TAB 3: CARTÕES -->
+          <div id="tab-cards" class="profile-tab-pane hidden">
+            <h2 class="font-serif text-2xl font-bold text-white mb-6">Métodos de Pagamento Registrados</h2>
+            
+            <form id="add-card-form" onsubmit="app.saveCard(event)" class="bg-brand-dark border border-brand-teal/20 p-6 rounded-lg mb-8 space-y-4">
+              <h3 class="font-serif text-lg font-bold text-white">Adicionar Novo Cartão (Simulação)</h3>
+              <div>
+                <label for="card-holder" class="block text-xs text-slate-400 mb-1">Nome Impresso no Cartão</label>
+                <input type="text" id="card-holder" required placeholder="AUGUSTO M MORAIS" class="w-full bg-brand-elevated border border-brand-teal/30 rounded px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-teal">
+              </div>
+              <div>
+                <label for="card-number" class="block text-xs text-slate-400 mb-1">Número do Cartão</label>
+                <input type="text" id="card-number" maxlength="19" required placeholder="0000 0000 0000 0000" class="w-full bg-brand-elevated border border-brand-teal/30 rounded px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-teal">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label for="card-expiry" class="block text-xs text-slate-400 mb-1">Validade</label>
+                  <input type="text" id="card-expiry" maxlength="5" placeholder="MM/AA" required class="w-full bg-brand-elevated border border-brand-teal/30 rounded px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-teal">
+                </div>
+                <div>
+                  <label for="card-cvv" class="block text-xs text-slate-400 mb-1">CVV</label>
+                  <input type="text" id="card-cvv" maxlength="4" placeholder="123" required class="w-full bg-brand-elevated border border-brand-teal/30 rounded px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-teal">
+                </div>
+              </div>
+              <button type="submit" class="w-full bg-brand-orange hover:bg-brand-orange/90 text-white font-bold py-2.5 rounded text-sm transition-colors">Salvar Cartão</button>
+            </form>
+
+            <div id="saved-cards-container" class="space-y-3">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: SOBRE NÓS -->
+    <section id="page-about" class="page-section hidden">
+      <div class="max-w-4xl mx-auto py-8">
+        <div class="text-center mb-12">
+          <span class="text-xs font-bold uppercase tracking-[0.3em] text-brand-teal bg-brand-teal/10 px-3 py-1 rounded-full border border-brand-teal/20">Nosso Manifesto</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-white mt-3">A Preservação da Memória Celulóide</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          <div class="md:col-span-2 space-y-4 text-slate-300 font-light text-base leading-relaxed">
+            <p>A <strong class="text-white font-semibold">Lost Wild</strong> nasceu em um porão analógico com uma missão clara: resistir ao esquecimento. Enquanto o mundo digital acelera rumo ao efêmero, nós mantemos vivas obras icônicas que moldaram a estética cinematográfica mundial.</p>
+            <p>Acreditamos no charme da seleção consciente, na nostalgia dos encartes táteis de DVD/VHS e na sensibilidade das grandes direções de arte. Nosso acervo combina raridades restauradas em altíssima definição com edições físicas difíceis de encontrar em qualquer streaming tradicional.</p>
+            <blockquote class="border-l-2 border-brand-orange pl-4 italic text-slate-400 my-6 py-1">
+              "O cinema não é apenas entretenimento; é um templo de memórias imutáveis contra a erosão do tempo."
+            </blockquote>
+          </div>
+
+          <div class="bg-brand-card border border-brand-teal/20 p-6 rounded-xl space-y-4">
+            <h3 class="font-serif font-bold text-white text-lg">🏪 Unidade Física</h3>
+            <p class="text-xs text-slate-400"><strong>Endereço:</strong><br>Rua dos Antiquários, 1984 - Bairro Vintage, São Paulo - SP</p>
+            <p class="text-xs text-slate-400"><strong>Horário:</strong><br>Segunda a Sábado, das 10h às 22h</p>
+            <p class="text-xs text-slate-400"><strong>Contato:</strong><br>contato@lostwild.com | (11) 3888-1984</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE AUTENTICAÇÃO (LOGIN / REGISTRO) -->
+  <div id="auth-modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-brand-card border border-brand-teal/30 rounded-2xl p-6 sm:p-8 w-full max-w-md relative shadow-2xl">
+      <button onclick="app.closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+      
+      <!-- TABS LOGIN/REGISTRO -->
+      <div class="grid grid-cols-2 border-b border-brand-teal/20 mb-6">
+        <button id="tab-login-btn" onclick="app.switchAuthMode('login')" class="py-2.5 text-sm font-bold text-brand-orange border-b-2 border-brand-orange">Entrar</button>
+        <button id="tab-register-btn" onclick="app.switchAuthMode('register')" class="py-2.5 text-sm font-bold text-slate-400 hover:text-white">Criar Conta</button>
+      </div>
+
+      <!-- BOTÃO GOOGLE SIMULADO -->
+      <button onclick="app.loginWithGoogle()" class="w-full bg-brand-elevated hover:bg-brand-teal/20 border border-brand-teal/30 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-3 text-sm transition-colors mb-4">
+        <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.2 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.3s.7 2.6 1.9 5l3.7-2.5z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.2-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"/></svg>
+        Entrar com o Google
+      </button>
+
+      <div class="relative text-center mb-4">
+        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-brand-teal/20"></div></div>
+        <span class="relative bg-brand-card px-3 text-xs text-slate-500">ou com seu e-mail</span>
+      </div>
+
+      <!-- FORMULÁRIO -->
+      <form id="auth-form" onsubmit="app.handleAuthSubmit(event)" class="space-y-4">
+        <div id="group-name" class="hidden">
+          <label for="auth-name" class="block text-xs text-slate-400 mb-1">Nome Completo</label>
+          <input type="text" id="auth-name" placeholder="Seu nome" class="w-full bg-brand-elevated border border-brand-teal/30 rounded-lg px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-teal">
+        </div>
+
+        <div>
+          <label for="auth-email" class="block text-xs text-slate-400 mb-1">E-mail</label>
+          <input type="email" id="auth-email" required placeholder="seu@email.com" class="w-full bg-brand-elevated border border-brand-teal/30 rounded-lg px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-teal">
+        </div>
+
+        <div>
+          <label for="auth-password" class="block text-xs text-slate-400 mb-1">Senha</label>
+          <input type="password" id="auth-password" required placeholder="••••••••" class="w-full bg-brand-elevated border border-brand-teal/30 rounded-lg px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-teal">
+        </div>
+
+        <div id="auth-error-msg" class="hidden text-xs text-red-400 bg-red-950/50 border border-red-800 p-2 rounded"></div>
+
+        <button type="submit" id="auth-submit-btn" class="w-full bg-brand-orange hover:bg-brand-orange/90 text-white font-bold py-2.5 rounded-lg text-sm transition-colors">Entrar na Conta</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE DETALHES DO FILME -->
+  <div id="movie-modal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-brand-card border border-brand-teal/30 rounded-2xl p-6 sm:p-8 w-full max-w-2xl relative shadow-2xl">
+      <button onclick="app.closeMovieModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+      <div id="movie-modal-content">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER / CARRINHO DE COMPRAS -->
+  <aside id="cart-drawer" class="hidden fixed top-0 right-0 z-[101] w-full max-w-sm h-screen bg-brand-card border-l border-brand-teal/30 p-6 flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between pb-4 border-b border-brand-teal/20">
+      <h2 class="font-serif text-xl font-bold text-white">Seu Carrinho</h2>
+      <button onclick="app.toggleCart()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+    </div>
+
+    <div id="cart-items-container" class="flex-1 overflow-y-auto py-4 space-y-3">
+      <!-- Renderizado via JS -->
+    </div>
+
+    <div class="pt-4 border-t border-brand-teal/20 space-y-3">
+      <div class="flex justify-between items-center text-lg font-bold text-white">
+        <span>Total:</span>
+        <span id="cart-total-price">R$ 0,00</span>
+      </div>
+      <div class="bg-brand-elevated p-2.5 rounded text-[11px] text-slate-400 text-center">
+        📍 Retirada presencial em loja física em até 2 dias úteis.
+      </div>
+      <button onclick="app.checkout()" class="w-full bg-brand-orange hover:bg-brand-orange/90 text-white font-bold py-3 rounded-lg text-sm transition-colors">Finalizar Pedido / Aluguel</button>
+    </div>
+  </aside>
+
+  <!-- TOAST DE NOTIFICAÇÃO -->
+  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] bg-brand-elevated border border-brand-teal text-white text-xs sm:text-sm px-6 py-3 rounded-full shadow-2xl transition-all"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

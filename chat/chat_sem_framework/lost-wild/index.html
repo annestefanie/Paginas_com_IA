@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f0e8">
+  <meta name="description" content="Lost Wild — uma locadora para filmes que merecem continuar vivos.">
+  <title>Lost Wild — Entre, escolha, dê play.</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <a class="wordmark auth-wordmark" href="index.html" aria-label="Lost Wild, início">lost<span>wild</span><i>®</i></a>
+    <section class="auth-art" aria-label="Manifesto Lost Wild">
+      <div class="art-topline"><span>CLUBE DE CINEMA · DESDE 1998*</span><span>BRASÍLIA, DF</span></div>
+      <div class="auth-art-copy">
+        <p class="eyebrow">PARA QUEM AINDA PROCURA</p>
+        <h1>Algumas histórias<br>não ficam <em>velhas.</em></h1>
+        <p>Filmes esquecidos, capas gastas e aquela sensação boa de encontrar exatamente o que você nem sabia que procurava.</p>
+      </div>
+      <div class="film-strip" aria-hidden="true"><span>LOST WILD</span><span>REWIND YOUR MIND</span><span>LOST WILD</span></div>
+      <p class="art-footnote">*Uma história inventada. Um amor real pelo cinema.</p>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-mobile-mark">UMA LOCADORA FORA DO TEMPO</div>
+      <div class="auth-heading">
+        <p class="eyebrow">SEU PRÓXIMO FILME FAVORITO</p>
+        <h2 id="authTitle">Que bom ter você<br>por aqui.</h2>
+        <p id="authIntro">Entre para descobrir raridades, salvar desejos e continuar de onde a última sessão parou.</p>
+      </div>
+      <div class="auth-tabs" role="tablist" aria-label="Acesso à conta">
+        <button class="auth-tab active" type="button" data-auth-mode="login" role="tab" aria-selected="true">Entrar</button>
+        <button class="auth-tab" type="button" data-auth-mode="signup" role="tab" aria-selected="false">Criar conta</button>
+      </div>
+      <form id="authForm" novalidate>
+        <label for="authName" id="nameLabel" class="field-label hidden">Como podemos te chamar?</label>
+        <input id="authName" class="field hidden" type="text" autocomplete="name" placeholder="Seu nome">
+        <label for="authEmail" class="field-label">E-mail</label>
+        <input id="authEmail" class="field" type="email" autocomplete="email" placeholder="voce@email.com" required>
+        <label for="authPassword" class="field-label">Senha</label>
+        <div class="password-wrap">
+          <input id="authPassword" class="field" type="password" autocomplete="current-password" placeholder="Mínimo de 8 caracteres" minlength="8" required>
+          <button class="password-toggle" type="button" aria-label="Mostrar senha" data-toggle-password="authPassword">ver</button>
+        </div>
+        <p class="field-hint" id="passwordHint">Use pelo menos 8 caracteres.</p>
+        <div id="authError" class="form-message" role="alert" aria-live="polite"></div>
+        <button class="button button-dark button-full" id="authSubmit" type="submit">Entrar na locadora <span aria-hidden="true">↗</span></button>
+      </form>
+      <div class="or-divider"><span>OU</span></div>
+      <button class="button button-google button-full" id="googleLogin" type="button"><span class="google-g" aria-hidden="true">G</span> Continuar com Google</button>
+      <p class="auth-legal">Ao continuar, você concorda com nossos <a href="pages/about.html">termos de convivência</a>. Protótipo: os dados ficam somente neste navegador.</p>
+      <div class="demo-note"><span class="dot"></span> Experiência demonstrativa · pagamentos fictícios</div>
+    </section>
+  </main>
+</body>
+</html>

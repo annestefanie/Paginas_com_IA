@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Entrar · Lost Wild</title><meta name="description" content="Locadora de clássicos raros em DVD e online.">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="auth">
+  <aside><div><h1>lost wild</h1><p class="lead" style="max-width:30ch;margin:1rem auto">Filmes que você não acha em lugar nenhum, esperando na prateleira.</p></div></aside>
+  <main id="main">
+    <div class="tabs" role="tablist" aria-label="Acesso">
+      <button role="tab" id="tIn" aria-selected="true" aria-controls="f">Entrar</button>
+      <button role="tab" id="tUp" aria-selected="false" aria-controls="f">Criar conta</button>
+    </div>
+    <form id="f" novalidate role="tabpanel" aria-labelledby="tIn">
+      <div id="nameBox" hidden><label for="name">Nome</label><input id="name" autocomplete="name" aria-describedby="eName"><p class="err" id="eName"></p></div>
+      <label for="email">E-mail</label><input id="email" type="email" autocomplete="email" aria-describedby="eMail"><p class="err" id="eMail"></p>
+      <label for="pass">Senha</label><input id="pass" type="password" autocomplete="current-password" aria-describedby="ePass hint">
+      <p class="small mute" id="hint" hidden>Mínimo de 8 caracteres, com letras e números.</p><p class="err" id="ePass"></p>
+      <div id="confBox" hidden><label for="conf">Repita a senha</label><input id="conf" type="password" autocomplete="new-password" aria-describedby="eConf"><p class="err" id="eConf"></p></div>
+      <label class="small" style="display:flex;gap:.5rem;align-items:center;font-weight:400"><input type="checkbox" id="show" style="width:auto;min-height:0"> Mostrar senha</label>
+      <p class="err" id="eForm" role="alert"></p>
+      <button class="btn hot" style="width:100%" id="go">Entrar</button>
+      <button class="btn" type="button" id="google" style="width:100%;margin-top:.6rem">Continuar com Google (simulado)</button>
+    </form>
+  </main>
+</div>
+<script src="js/app.js"></script><script src="js/login.js"></script>
+</body></html>

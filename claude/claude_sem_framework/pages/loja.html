@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Acervo · Lost Wild</title><link rel="icon" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-root="../">
+<main id="main">
+  <section class="hero"><div class="wrap">
+    <div class="fan" id="fan"><div class="core"><h2 style="margin:0;font-size:clamp(1.1rem,5vw,1.8rem)">Acervo raro</h2><a class="btn sm" href="#acervo">Ver os 20 títulos</a></div></div>
+    <h1>lost wild</h1><p class="lead">Clássicos difíceis de achar, em DVD ou online. Alugue por 7 dias ou leve para casa.</p>
+  </div></section>
+  <section class="sec wrap" id="acervo" aria-labelledby="hAcervo">
+    <h2 id="hAcervo">Acervo</h2>
+    <div class="tools">
+      <div><label for="q" style="margin-top:0">Buscar por título, diretor ou ano</label><input id="q" type="search" placeholder="Ex.: Hitchcock, 1960, Nosferatu"></div>
+      <button class="chip" id="onlyWish" aria-pressed="false" style="align-self:end">♥ Só minha lista de desejos</button>
+    </div>
+    <div class="chips" id="genres" role="group" aria-label="Filtrar por gênero"></div>
+    <p class="mute small" id="count" aria-live="polite" style="margin:1rem 0"></p>
+    <div class="grid" id="grid"></div>
+  </section>
+  <section class="sec" id="sobre"><div class="wrap about" style="border:0">
+    <div><h2>Filme que ninguém assiste morre duas vezes</h2></div>
+    <div><blockquote>Cada cópia que sai da nossa prateleira é um filme que continua vivo.</blockquote>
+    <p style="margin-top:1rem">A Lost Wild começou com uma caixa de fitas herdadas e uma pergunta: onde estão os filmes que sumiram dos catálogos? Hoje resgatamos cópias raras, restauramos o que dá e emprestamos para quem quer ver como se via antes: sem pressa, no escuro, com o filme inteiro.</p>
+    <p style="margin-top:1rem" class="mute">Retirada: <span id="addr"></span></p></div>
+  </div></section>
+</main>
+<aside class="drawer" id="cart" aria-label="Carrinho" aria-hidden="true">
+  <div class="line"><h2 style="margin:0;font-size:1.8rem">Carrinho</h2><button class="btn sm" id="closeCart">Fechar</button></div>
+  <div id="cartBody"></div>
+</aside>
+<dialog id="modal" aria-labelledby="mTitle"></dialog>
+<script src="js/data.js"></script><script src="js/app.js"></script><script src="js/loja.js"></script>
+</body></html>
